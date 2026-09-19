@@ -24,6 +24,14 @@ class TimeZoneExplorer {
     // TODO fix coordinates
     // TODO highlight markers and rows
     // TODO marker colors
+    // TODO reset all
+    // TODO count is not updated
+    // TODO make selects contextual
+    // TODO add more filters
+    // TODO format select options
+    // TODO sort select options
+    // TODO select rows and markers
+    
 
     #map;
     #markers;
@@ -95,7 +103,8 @@ class TimeZoneExplorer {
     }
 
     get region() {
-        return document.querySelector(TimeZoneExplorer.#SELECTOR_REGION).value;
+        const region = document.querySelector(TimeZoneExplorer.#SELECTOR_REGION).value;
+        return region || null;
     }
 
     set region(region) {
@@ -107,7 +116,8 @@ class TimeZoneExplorer {
     }
 
     get offset() {
-        return Number.parseInt(document.querySelector(TimeZoneExplorer.#SELECTOR_OFFSET).value);
+        const offset = Number.parseInt(document.querySelector(TimeZoneExplorer.#SELECTOR_OFFSET).value);
+        return Number.isNaN(offset) ? null : offset;
     }
 
     set offset(offset) {
@@ -132,7 +142,8 @@ class TimeZoneExplorer {
     }
 
     get savings() {
-        return Number.parseInt(document.querySelector(TimeZoneExplorer.#SELECTOR_SAVINGS).value);
+        const savings = Number.parseInt(document.querySelector(TimeZoneExplorer.#SELECTOR_SAVINGS).value);
+        return Number.isNaN(savings) ? null : savings;
     }
 
     set savings(savings) {
@@ -173,10 +184,10 @@ class TimeZoneExplorer {
                     .removeChild(document.querySelector(TimeZoneExplorer.#SELECTOR_ZONES).firstChild);
         }
         this.#markers.clearLayers();
-        this.#zones.filter((zone) => (!this.region) || (zone.region == this.region))
-                .filter((zone) => Number.isNaN(this.offset) || (zone.offset == this.offset))
+        this.#zones.filter((zone) => (this.region === null) || (zone.region == this.region))
+                .filter((zone) => (this.offset === null) || (zone.offset == this.offset))
                 .filter((zone) => (this.dst === null) || (zone.dst == this.dst))
-                .filter((zone) => Number.isNaN(this.savings) || (zone.savings == this.savings))
+                .filter((zone) => (this.savings === null) || (zone.savings == this.savings))
                 .map((zone) => zone.render())
                 .forEach((zone) => {
                     document.querySelector(TimeZoneExplorer.#SELECTOR_ZONES).appendChild(zone.row);
