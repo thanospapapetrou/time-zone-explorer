@@ -2,6 +2,7 @@
 
 class TimeZone {
     static LABEL_H_M = (ms) => `${(ms < 0) ? '-' : ((ms > 0) ? '+' : '')}${String(TimeConverter.ms2hMin(Math.abs(ms))[0]).padStart(2, '0')}:${String(TimeConverter.ms2hMin(Math.abs(ms))[1]).padStart(2, '0')}`;
+    static LABEL_YES_NO = (boolean) => `${boolean ? 'Yes' : 'No'}`
     static #CLASS_BOOLEAN = 'boolean';
     static #CLASS_DETAILS = 'details';
     static #CLASS_NUMERIC = 'numeric';
@@ -16,12 +17,10 @@ class TimeZone {
     static #LABEL_LNG = (dec) => `${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[0]}° ${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[1]}′ ${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[2]}″${(dec < 0) ? ' W' : ((dec > 0) ? ' E' : '')}`;
     static #LABEL_LONGITUDE = 'Longitude';
     static #LABEL_MS = (ms) => `${(ms < 0) ? '-' : ((ms > 0) ? '+' : '')}${Math.abs(ms).toLocaleString('en')} ms`;
-    static #LABEL_NO = 'No';
     static #LABEL_OFFSET = 'Offset';
     static #LABEL_REGION = 'Region';
     static #LABEL_SAVINGS = 'Savings';
     static #LABEL_SUBREGION = 'Subregion';
-    static #LABEL_YES = 'Yes';
     static #MARKER_ANCHOR = L.point(12, 41);
     static #MARKER_ICON = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
     static #MARKER_SCALE = 1.5;
@@ -127,7 +126,7 @@ class TimeZone {
         symbol.classList.add(this.#zone.dst);
         symbol.appendChild(document.createTextNode(TimeZone.#LABEL_BOOLEAN(this.#zone.dst)));
         dd.appendChild(document.createElement(HtmlElements.SPAN))
-                .appendChild(document.createTextNode(this.#zone.dst ? TimeZone.#LABEL_YES : TimeZone.#LABEL_NO));
+                .appendChild(document.createTextNode(TimeZone.LABEL_YES_NO(this.#zone.dst)));
         dl.appendChild(document.createElement(HtmlElements.DT))
                 .appendChild(document.createTextNode(TimeZone.#LABEL_SAVINGS));
         dl.appendChild(document.createElement(HtmlElements.DD))
@@ -164,7 +163,7 @@ class TimeZone {
         symbol.classList.add(boolean);
         symbol.appendChild(document.createTextNode(TimeZone.#LABEL_BOOLEAN(boolean)));
         cell.appendChild(document.createElement(HtmlElements.SPAN))
-                .appendChild(document.createTextNode(boolean ? TimeZone.#LABEL_YES : TimeZone.#LABEL_NO));
+                .appendChild(document.createTextNode(TimeZone.LABEL_YES_NO(boolean)));
         cell.appendChild(document.createElement(HtmlElements.BR));
         const details = cell.appendChild(document.createElement(HtmlElements.SPAN));
         details.classList.add(TimeZone.#CLASS_DETAILS);
