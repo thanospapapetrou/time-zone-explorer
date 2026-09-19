@@ -15,6 +15,7 @@ class TimeZoneExplorer {
     static #PARAMETER_REGION = 'region';
     static #PARAMETER_SAVINGS = 'savings';
     static #PARAMETER_ZOOM = 'zoom';
+    static #SELECTOR_CLEAR = 'button#clear';
     static #SELECTOR_COUNT = 'td#count';
     static #SELECTOR_DST = 'select#dst';
     static #SELECTOR_MAP = 'div#map';
@@ -24,10 +25,7 @@ class TimeZoneExplorer {
     static #SELECTOR_ZONES = 'tbody#zones';
     static #TIME_ZONES = './json/time-zones.json';
     // TODO fix coordinates
-    // TODO highlight markers and rows
     // TODO marker colors
-    // TODO reset all
-    // TODO count is not updated
     // TODO make selects contextual
     // TODO add more filters
     // TODO select rows and markers
@@ -74,6 +72,7 @@ class TimeZoneExplorer {
                         TimeZone.LABEL_H_M, (event) => {
                             this.savings = event.target.value;
                         });
+                document.querySelector(TimeZoneExplorer.#SELECTOR_CLEAR).onclick = this.reset.bind(this);
                 return this;
             });
         });
@@ -140,16 +139,20 @@ class TimeZoneExplorer {
         this.#map.setZoom(zoom);
     }
 
+    reset() {
+        this.region = null;
+        this.offset = null;
+        this.dst = null;
+        this.savings = null;
+    }
+
     render() {
         while (document.querySelector(TimeZoneExplorer.#SELECTOR_ZONES).firstChild) {
             document.querySelector(TimeZoneExplorer.#SELECTOR_ZONES)
                     .removeChild(document.querySelector(TimeZoneExplorer.#SELECTOR_ZONES).firstChild);
         }
         this.#markers.clearLayers();
-        this.#zones.filter((zone) => (this.region === null) || (zone.region == this.region))
-                .filter((zone) => (this.offset === null) || (zone.offset == this.offset))
-                .filter((zone) => (this.dst === null) || (zone.dst == this.dst))
-                .filter((zone) => (this.savings === null) || (zone.savings == this.savings))
+        this.#filter()
                 .map((zone) => zone.render())
                 .forEach((zone) => {
                     document.querySelector(TimeZoneExplorer.#SELECTOR_ZONES).appendChild(zone.row);
@@ -158,8 +161,16 @@ class TimeZoneExplorer {
         document.querySelector(TimeZoneExplorer.#SELECTOR_COUNT)
                 .removeChild(document.querySelector(TimeZoneExplorer.#SELECTOR_COUNT).firstChild);
         document.querySelector(TimeZoneExplorer.#SELECTOR_COUNT)
-                .appendChild(document.createTextNode(TimeZoneExplorer.#LABEL_COUNT(this.#zones
-                .filter((zone) => (!this.region) || (zone.region == this.region)).length, this.#zones.length)));
+                .appendChild(document.createTextNode(TimeZoneExplorer.#LABEL_COUNT(this.#filter().length,
+                this.#zones.length)));
+    }
+
+    #filter() {
+        return this.#zones.filter((zone) => (this.region === null) || (zone.region == this.region))
+                .filter((zone) => (this.offset === null) || (zone.offset == this.offset))
+                .filter((zone) => (this.dst === null) || (zone.dst == this.dst))
+                .filter((zone) => (this.savings === null) || (zone.savings == this.savings));
+
     }
 
     #renderSelect(selector, value, comparator, label, onchange) {

@@ -12,7 +12,7 @@ aside {
 
 div#map {
     height: 768px;
-    width: 768px;
+    width: 1024px;
 }
 
 dt {
@@ -21,7 +21,6 @@ dt {
 
 table {
     border-collapse: collapse;
-    width: 768px;
 }
 
 thead, tfoot {
