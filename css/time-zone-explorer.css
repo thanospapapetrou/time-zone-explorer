@@ -1,0 +1,66 @@
+body {
+    font-family: 'Varela Round';
+}
+
+header, nav, aside, main, footer {
+    margin: 1em;
+}
+
+aside {
+    float:right;
+}
+
+div#map {
+    height: 768px;
+    width: 768px;
+}
+
+dt {
+    font-weight: bold;
+}
+
+table {
+    border-collapse: collapse;
+    width: 768px;
+}
+
+thead, tfoot {
+    background-color: LightGrey;
+    font-weight: bold;
+}
+
+tbody > tr:nth-child(odd) {
+    background-color: White;
+}
+
+tbody > tr:nth-child(even) {
+    background-color: SeaShell;
+}
+
+tbody > tr.selected {
+    background-color: PowderBlue;
+}
+
+td {
+    border: 0.125em solid black;
+}
+
+td.numeric {
+    text-align: end;
+}
+
+td.boolean {
+    text-align: center;
+}
+
+span.details {
+    font-size: x-small;
+}
+
+span.true {
+    color: green;
+}
+
+span.false {
+    color: red;
+}
