@@ -29,6 +29,7 @@ class TimeZoneExplorer {
     // TODO make selects contextual
     // TODO add more filters
     // TODO select rows and markers
+    // TODO countries
 
     #map;
     #markers;

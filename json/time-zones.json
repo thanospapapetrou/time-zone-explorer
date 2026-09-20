@@ -5264,8 +5264,8 @@
     "savings": 0,
     "country": "US",
     "city": "Midway",
-    "lat": 31.0260203,
-    "lng": -95.7505033
+    "lat": 28.2075,
+    "lng": -177.35
   },
   {
     "id": "Pacific/Nauru",
@@ -5418,10 +5418,10 @@
     "offset": -39600000,
     "dst": false,
     "savings": 0,
-    "country": "US",
+    "country": "WS",
     "city": "Samoa",
-    "lat": 40.8187372,
-    "lng": -124.1864518
+    "lat": -13.745,
+    "lng": -172.2175
   },
   {
     "id": "Pacific/Tahiti",
