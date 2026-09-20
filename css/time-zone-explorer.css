@@ -10,8 +10,8 @@ aside {
     float:right;
 }
 
-select {
-    margin-right: 1em;
+label, select {
+    margin: 1em;
 }
 
 div#map {
