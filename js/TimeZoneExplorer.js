@@ -1,6 +1,7 @@
 'use strict';
 
 class TimeZoneExplorer {
+    static #COUNTRIES = './json/countries.json';
     static #ERROR_LOADING = 'Error loading %s';
     static #LABEL_COUNT = (count, total) => `${count}/${total} Time Zones`;
     static #MAP_TILES_OPTIONS = {
@@ -31,11 +32,12 @@ class TimeZoneExplorer {
     // TODO select rows and markers
     // TODO countries
 
-    // TODO -06:00/+12:00
+    // TODO -06:00 - -02:00 & 00:00 - +12:00
 
     #map;
     #markers;
     #zones;
+    #countries;
 
     static async main() {
         const explorer = await new TimeZoneExplorer();
@@ -59,6 +61,16 @@ class TimeZoneExplorer {
             }
             return response.json().then((zones) => {
                 this.#zones = zones.map((zone) => new TimeZone(zone));
+
+//                return fetch(TimeZoneExplorer.#COUNTRIES).then((response) => {
+//                    if (!response.ok) {
+//                        console.error(TimeZoneExplorer.#ERROR_LOADING, TimeZoneExplorer.#COUNTRIES);
+//                    }
+//                    return response.json().then((countries) => {
+//                        this.#countries = countries;
+//                    });
+//                });
+
                 this.#renderSelect(TimeZoneExplorer.#SELECTOR_REGION, (zone) => zone.region, undefined, undefined,
                         (event) => {
                             this.region = event.target.value;

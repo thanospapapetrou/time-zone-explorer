@@ -3702,10 +3702,10 @@
     "offset": -3600000,
     "dst": true,
     "savings": 3600000,
-    "country": "ES",
+    "country": "PT",
     "city": "Azores",
-    "lat": 37.4675599,
-    "lng": -4.1826067
+    "lat": 38.66,
+    "lng": -28.07
   },
   {
     "id": "Atlantic/Bermuda",
