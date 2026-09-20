@@ -31,6 +31,8 @@ class TimeZoneExplorer {
     // TODO select rows and markers
     // TODO countries
 
+    // TODO -06:00/+12:00
+
     #map;
     #markers;
     #zones;

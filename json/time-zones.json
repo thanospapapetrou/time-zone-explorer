@@ -2034,10 +2034,10 @@
     "offset": -28800000,
     "dst": true,
     "savings": 3600000,
-    "country": "BR",
+    "country": "MX",
     "city": "Santa Isabel",
-    "lat": -23.3194222,
-    "lng": -46.2271903
+    "lat": 28.342222,
+    "lng": -106.368333
   },
   {
     "id": "America/Santarem",
@@ -5022,10 +5022,10 @@
     "offset": 45900000,
     "dst": true,
     "savings": 3600000,
-    "country": "GB",
-    "city": "Chatham",
-    "lat": 51.3819167,
-    "lng": 0.526559
+    "country": "NZ",
+    "city": "Chatham Islands",
+    "lat": -44,
+    "lng": -176.5
   },
   {
     "id": "Pacific/Chuuk",
@@ -5130,10 +5130,10 @@
     "offset": -32400000,
     "dst": false,
     "savings": 0,
-    "country": "US",
+    "country": "PF",
     "city": "Gambier",
-    "lat": 40.375643,
-    "lng": -82.3970994
+    "lat": -23.116667,
+    "lng": -134.966667
   },
   {
     "id": "Pacific/Guadalcanal",
@@ -5178,10 +5178,10 @@
     "offset": -36000000,
     "dst": false,
     "savings": 0,
-    "country": "US",
+    "country": "UM",
     "city": "Johnston",
-    "lat": 41.6731523,
-    "lng": -93.6973395
+    "lat": 16.736944,
+    "lng": -169.523889
   },
   {
     "id": "Pacific/Kanton",
@@ -5190,10 +5190,10 @@
     "offset": 46800000,
     "dst": false,
     "savings": 0,
-    "country": "CN",
-    "city": "Guangzhou City",
-    "lat": 23.1301964,
-    "lng": 113.2592945
+    "country": "KI",
+    "city": "Kanton",
+    "lat": -2.810556,
+    "lng": -171.675556
   },
   {
     "id": "Pacific/Kiritimati",
@@ -5250,7 +5250,7 @@
     "offset": -34200000,
     "dst": false,
     "savings": 0,
-    "country": "FR",
+    "country": "PF",
     "city": "Marquesas Islands",
     "lat": -9.77932555,
     "lng": -139.00678353699942
@@ -5346,10 +5346,10 @@
     "offset": -28800000,
     "dst": false,
     "savings": 0,
-    "country": "US",
+    "country": "PN",
     "city": "Pitcairn",
-    "lat": 40.4031245,
-    "lng": -79.778102
+    "lat": -25.066667,
+    "lng": -130.1
   },
   {
     "id": "Pacific/Pohnpei",
@@ -5430,7 +5430,7 @@
     "offset": -36000000,
     "dst": false,
     "savings": 0,
-    "country": "FR",
+    "country": "PF",
     "city": "Tahiti",
     "lat": -17.68734395,
     "lng": -149.44516811423745
