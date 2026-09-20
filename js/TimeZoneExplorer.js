@@ -31,6 +31,8 @@ class TimeZoneExplorer {
     // TODO add more filters
     // TODO select rows and markers
     // TODO countries
+    // TODO load
+    // TODO renderSelect multiple
 
     // TODO -06:00 - -02:00 & 00:00 - +12:00
 
@@ -55,22 +57,13 @@ class TimeZoneExplorer {
         this.#map = L.map(document.querySelector(TimeZoneExplorer.#SELECTOR_MAP), {center: [0.0, 0.0], zoom: 0});
         L.tileLayer(TimeZoneExplorer.#MAP_TILES_URL, TimeZoneExplorer.#MAP_TILES_OPTIONS).addTo(this.#map);
         this.#markers = L.layerGroup().addTo(this.#map);
-        return fetch(TimeZoneExplorer.#TIME_ZONES).then((response) => {
-            if (!response.ok) {
-                console.error(TimeZoneExplorer.#ERROR_LOADING, TimeZoneExplorer.#TIME_ZONES);
-            }
-            return response.json().then((zones) => {
-                this.#zones = zones.map((zone) => new TimeZone(zone));
-
-//                return fetch(TimeZoneExplorer.#COUNTRIES).then((response) => {
-//                    if (!response.ok) {
-//                        console.error(TimeZoneExplorer.#ERROR_LOADING, TimeZoneExplorer.#COUNTRIES);
-//                    }
-//                    return response.json().then((countries) => {
-//                        this.#countries = countries;
-//                    });
-//                });
-
+        return this.#load(TimeZoneExplorer.#COUNTRIES, (countries) => {
+            this.#countries = {};
+            countries.forEach((country) => {
+                this.#countries[country.code] = country.name;
+            });
+            return this.#load(TimeZoneExplorer.#TIME_ZONES, (zones) => {
+                this.#zones = zones.map((zone) => new TimeZone(zone, this.#countries[zone.country]));
                 this.#renderSelect(TimeZoneExplorer.#SELECTOR_REGION, (zone) => zone.region, undefined, undefined,
                         (event) => {
                             this.region = event.target.value;
@@ -186,6 +179,15 @@ class TimeZoneExplorer {
                 .filter((zone) => (this.dst === null) || (zone.dst == this.dst))
                 .filter((zone) => (this.savings === null) || (zone.savings == this.savings));
 
+    }
+
+    #load(data, callback) {
+        return fetch(data).then((response) => {
+            if (!response.ok) {
+                console.error(TimeZoneExplorer.#ERROR_LOADING, data);
+            }
+            return response.json().then(callback);
+        });
     }
 
     #renderSelect(selector, value, comparator, label, onchange) {

@@ -30,8 +30,9 @@ class TimeZone {
     #row;
     #marker;
 
-    constructor(zone, markers) {
+    constructor(zone, country) {
         this.#zone = zone;
+        this.#zone.country = {code: this.#zone.country, name: country};
         this.#row = null;
         this.#marker = null;
     }
@@ -84,8 +85,7 @@ class TimeZone {
                 .appendChild(document.createTextNode(this.#zone.region));
         this.#row.appendChild(document.createElement(HtmlElements.TD))
                 .appendChild(document.createTextNode(this.#zone.subregion));
-        this.#row.appendChild(document.createElement(HtmlElements.TD))
-                .appendChild(document.createTextNode(this.#zone.country));
+        this.#row.appendChild(this.#renderCountry(this.#zone.country));
         this.#row.appendChild(document.createElement(HtmlElements.TD))
                 .appendChild(document.createTextNode(this.#zone.city));
         this.#row.appendChild(this.#renderCoordinate(this.#zone.lat, false));
@@ -110,7 +110,7 @@ class TimeZone {
         Object.entries({
             [TimeZone.#LABEL_REGION]: this.#zone.region,
             [TimeZone.#LABEL_SUBREGION]: this.#zone.subregion,
-            [TimeZone.#LABEL_COUNTRY]: this.#zone.country,
+            [TimeZone.#LABEL_COUNTRY]: this.#zone.country.name,
             [TimeZone.#LABEL_CITY]: this.#zone.city,
             [TimeZone.#LABEL_LATITUDE]: TimeZone.#LABEL_LAT(this.#zone.lat),
             [TimeZone.#LABEL_LONGITUDE]: TimeZone.#LABEL_LNG(this.#zone.lng),
@@ -132,6 +132,16 @@ class TimeZone {
         dl.appendChild(document.createElement(HtmlElements.DD))
                 .appendChild(document.createTextNode(TimeZone.LABEL_H_M(this.#zone.savings)));
         return popup.getHTML();
+    }
+
+    #renderCountry(country) {
+        const cell = document.createElement(HtmlElements.TD);
+        cell.appendChild(document.createTextNode(country.name));
+        cell.appendChild(document.createElement(HtmlElements.BR));
+        const details = cell.appendChild(document.createElement(HtmlElements.SPAN));
+        details.classList.add(TimeZone.#CLASS_DETAILS);
+        details.appendChild(document.createTextNode(country.code));
+        return cell;
     }
 
     #renderCoordinate(dec, lng) {
