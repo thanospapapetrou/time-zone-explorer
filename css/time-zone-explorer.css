@@ -6,13 +6,42 @@ header, nav, aside, main, footer {
     margin: 1em;
 }
 
-label, select {
-    margin: 1em;
-}
-
 div#map {
     height: 768px;
     width: 1024px;
+}
+
+label, select {
+    margin: 0.5em;
+}
+
+.noUi-target {
+    border: 0.125em solid black;
+    border-radius: 0.5em;
+}
+
+div#latitude {
+    display: inline-block;
+    height: 1em;
+    width: 16em;
+}
+
+div#latitude .noUi-handle {
+    background-color: LightGrey;
+    border: 0.125em solid black;
+    border-radius: 0.5em;
+    height: 1em;
+    right: -0.5em;
+    top: -0.125em;
+    width: 1em;
+}
+
+div.noUi-handle:before, div.noUi-handle:after {
+    background: none;
+}
+
+div.noUi-connect {
+    background-color: PowderBlue;
 }
 
 dt {

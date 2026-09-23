@@ -14,6 +14,8 @@ class TimeZoneExplorer {
     static #PARAMETER_COUNTRY = 'country';
     static #PARAMETER_DST = 'dst';
     static #PARAMETER_LAT = 'lat';
+    static #PARAMETER_LAT_MAX = 'latMax';
+    static #PARAMETER_LAT_MIN = 'latMin';
     static #PARAMETER_LNG = 'lng';
     static #PARAMETER_OFFSET = 'offset';
     static #PARAMETER_REGION = 'region';
@@ -25,6 +27,7 @@ class TimeZoneExplorer {
     static #SELECTOR_COUNT = 'td#count';
     static #SELECTOR_COUNTRY = 'select#country';
     static #SELECTOR_DST = 'select#dst';
+    static #SELECTOR_LATITUDE = 'div#latitude';
     static #SELECTOR_MAP = 'div#map';
     static #SELECTOR_OFFSET = 'select#offset';
     static #SELECTOR_REGION = 'select#region';
@@ -44,6 +47,7 @@ class TimeZoneExplorer {
 
     #map;
     #markers;
+    #latitude;
     #zones;
     #countries;
 
@@ -54,6 +58,10 @@ class TimeZoneExplorer {
         explorer.subregion = params.get(TimeZoneExplorer.#PARAMETER_SUBREGION);
         explorer.country = params.get(TimeZoneExplorer.#PARAMETER_COUNTRY);
         explorer.city = params.get(TimeZoneExplorer.#PARAMETER_CITY);
+        const latitudeMin = Number.parseFloat(params.get(TimeZoneExplorer.#PARAMETER_LAT_MIN));
+        const latitudeMax = Number.parseFloat(params.get(TimeZoneExplorer.#PARAMETER_LAT_MAX));
+        explorer.latitude = [Math.min(Math.max(Number.isNaN(latitudeMin) ? -90.0 : latitudeMin, -90.0), 90.0),
+                Math.min(Math.max(Number.isNaN(latitudeMax) ? 90.0 : latitudeMax, -90.0), 90.0)]; // TODO validate
         explorer.offset = Number.parseInt(params.get(TimeZoneExplorer.#PARAMETER_OFFSET));
         explorer.dst = params.get(TimeZoneExplorer.#PARAMETER_DST);
         explorer.savings = Number.parseInt(params.get(TimeZoneExplorer.#PARAMETER_SAVINGS));
@@ -87,6 +95,19 @@ class TimeZoneExplorer {
                 document.querySelector(TimeZoneExplorer.#SELECTOR_CITY).oninput = (event) => {
                     this.city = event.target.value;
                 };
+                this.#latitude = noUiSlider.create(document.querySelector(TimeZoneExplorer.#SELECTOR_LATITUDE), {
+                    range: {
+                        min: -90,
+                        max: 90
+                    },
+                    start: [-90, 90], connect: true,
+                    tooltips: [{to: TimeZone.LABEL_LAT}, {to: TimeZone.LABEL_LAT}],
+                    pips: {
+                        mode: 'values',
+                        values: [-90, 0, 90],
+                        density: 25
+                    }
+                });
                 this.#renderSelect(TimeZoneExplorer.#SELECTOR_OFFSET, (zone) => zone.offset, (a, b) => a - b,
                         TimeZone.LABEL_H_M, (event) => {
                             this.offset = event.target.value;
@@ -141,6 +162,14 @@ class TimeZoneExplorer {
     set city(city) {
         document.querySelector(TimeZoneExplorer.#SELECTOR_CITY).value = city;
         this.render();
+    }
+
+    get latitude() {
+        return this.#latitude.get(true);
+    }
+
+    set latitude(latitude) {
+        this.#latitude.set(latitude);
     }
 
     get offset() {
@@ -231,6 +260,7 @@ class TimeZoneExplorer {
                 .filter((zone) => (this.country === null) || (zone.country == this.country))
                 .filter((zone) => (this.city === null)
                         || (zone.city.toLowerCase().includes(this.city.toLowerCase())))
+                .filter((zone) => (this.latitude[0] <= zone.lat) && (zone.lat <= this.latitude[1]))
                 .filter((zone) => (this.offset === null) || (zone.offset == this.offset))
                 .filter((zone) => (this.dst === null) || (zone.dst == this.dst))
                 .filter((zone) => (this.savings === null) || (zone.savings == this.savings));

@@ -2,6 +2,7 @@
 
 class TimeZone {
     static LABEL_H_M = (ms) => `${(ms < 0) ? '-' : ((ms > 0) ? '+' : '')}${String(TimeConverter.ms2hMin(Math.abs(ms))[0]).padStart(2, '0')}:${String(TimeConverter.ms2hMin(Math.abs(ms))[1]).padStart(2, '0')}`;
+    static LABEL_LAT = (dec) => `${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[0]}° ${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[1]}′ ${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[2]}″${(dec < 0) ? ' S' : ((dec > 0) ? ' N' : '')}`;
     static LABEL_YES_NO = (boolean) => `${boolean ? 'Yes' : 'No'}`
     static #CLASS_BOOLEAN = 'boolean';
     static #CLASS_DETAILS = 'details';
@@ -12,7 +13,6 @@ class TimeZone {
     static #LABEL_COUNTRY = 'Country';
     static #LABEL_DEC = (dec) => `${(dec < 0) ? '-' : ((dec > 0) ? '+' : '')}${Math.abs(dec)}`;
     static #LABEL_DST = 'DST';
-    static #LABEL_LAT = (dec) => `${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[0]}° ${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[1]}′ ${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[2]}″${(dec < 0) ? ' S' : ((dec > 0) ? ' N' : '')}`;
     static #LABEL_LATITUDE = 'Latitude';
     static #LABEL_LNG = (dec) => `${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[0]}° ${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[1]}′ ${CoordinatesConverter.dec2degMinSec(Math.abs(dec))[2]}″${(dec < 0) ? ' W' : ((dec > 0) ? ' E' : '')}`;
     static #LABEL_LONGITUDE = 'Longitude';
@@ -51,6 +51,14 @@ class TimeZone {
 
     get city() {
         return this.#zone.city;
+    }
+
+    get lat() {
+        return this.#zone.lat;
+    }
+
+    get lng() {
+        return this.#zone.lng;
     }
 
     get offset() {
@@ -124,7 +132,7 @@ class TimeZone {
             [TimeZone.#LABEL_SUBREGION]: this.#zone.subregion,
             [TimeZone.#LABEL_COUNTRY]: this.#zone.country.name,
             [TimeZone.#LABEL_CITY]: this.#zone.city,
-            [TimeZone.#LABEL_LATITUDE]: TimeZone.#LABEL_LAT(this.#zone.lat),
+            [TimeZone.#LABEL_LATITUDE]: TimeZone.LABEL_LAT(this.#zone.lat),
             [TimeZone.#LABEL_LONGITUDE]: TimeZone.#LABEL_LNG(this.#zone.lng),
             [TimeZone.#LABEL_OFFSET]: TimeZone.LABEL_H_M(this.#zone.offset)
         }).forEach(([term, definition]) => {
@@ -159,7 +167,7 @@ class TimeZone {
     #renderCoordinate(dec, lng) {
         const cell = document.createElement(HtmlElements.TD);
         cell.classList.add(TimeZone.#CLASS_NUMERIC);
-        cell.appendChild(document.createTextNode((lng ? TimeZone.#LABEL_LNG : TimeZone.#LABEL_LAT)(dec)));
+        cell.appendChild(document.createTextNode((lng ? TimeZone.#LABEL_LNG : TimeZone.LABEL_LAT)(dec)));
         cell.appendChild(document.createElement(HtmlElements.BR));
         const details = cell.appendChild(document.createElement(HtmlElements.SPAN));
         details.classList.add(TimeZone.#CLASS_DETAILS);

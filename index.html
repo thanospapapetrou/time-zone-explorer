@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="./css/nouislider.css"/>
     <link rel="stylesheet" href="./css/time-zone-explorer.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -17,6 +18,7 @@
     <script src="./js/TimeConverter.js"></script>
     <script src="./js/TimeZone.js"></script>
     <script src="./js/TimeZoneExplorer.js"></script>
+    <script src="./js/nouislider.js"></script>
 </head>
 <body onload="TimeZoneExplorer.main();">
 <header>
@@ -38,6 +40,8 @@
     </select>
     <label for="city">City:</label>
     <input type="search" id="city"/>
+    <label for="latitude">Latitude:</label>
+    <div id="latitude"></div>
     <label for="offset">Offset:</label>
     <select id="offset">
         <option value="">Any</option>
