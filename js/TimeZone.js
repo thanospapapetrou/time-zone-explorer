@@ -49,6 +49,10 @@ class TimeZone {
         return this.#zone.country.code;
     }
 
+    get city() {
+        return this.#zone.city;
+    }
+
     get offset() {
         return this.#zone.offset;
     }
