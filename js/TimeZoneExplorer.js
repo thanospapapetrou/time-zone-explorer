@@ -1,7 +1,8 @@
 'use strict';
 
 class TimeZoneExplorer {
-    static #COUNTRIES = './json/countries.json';
+    static #DATA_COUNTRIES = './json/countries.json';
+    static #DATA_TIME_ZONES = './json/time-zones.json';
     static #ERROR_LOADING = 'Error loading %s';
     static #LABEL_COUNT = (count, total) => `${count}/${total} Time Zones`;
     static #MAP_TILES_OPTIONS = {
@@ -9,6 +10,7 @@ class TimeZoneExplorer {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     };
     static #MAP_TILES_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+    static #PARAMETER_COUNTRY = 'country';
     static #PARAMETER_DST = 'dst';
     static #PARAMETER_LAT = 'lat';
     static #PARAMETER_LNG = 'lng';
@@ -19,6 +21,7 @@ class TimeZoneExplorer {
     static #PARAMETER_ZOOM = 'zoom';
     static #SELECTOR_CLEAR = 'button#clear';
     static #SELECTOR_COUNT = 'td#count';
+    static #SELECTOR_COUNTRY = 'select#country';
     static #SELECTOR_DST = 'select#dst';
     static #SELECTOR_MAP = 'div#map';
     static #SELECTOR_OFFSET = 'select#offset';
@@ -26,7 +29,6 @@ class TimeZoneExplorer {
     static #SELECTOR_SAVINGS = 'select#savings';
     static #SELECTOR_SUBREGION = 'input#subregion';
     static #SELECTOR_ZONES = 'tbody#zones';
-    static #TIME_ZONES = './json/time-zones.json';
     // TODO fix coordinates
     // TODO marker colors
     // TODO make selects contextual
@@ -48,6 +50,7 @@ class TimeZoneExplorer {
         const params = new URLSearchParams(location.search);
         explorer.region = params.get(TimeZoneExplorer.#PARAMETER_REGION);
         explorer.subregion = params.get(TimeZoneExplorer.#PARAMETER_SUBREGION);
+        explorer.country = params.get(TimeZoneExplorer.#PARAMETER_COUNTRY);
         explorer.offset = Number.parseInt(params.get(TimeZoneExplorer.#PARAMETER_OFFSET));
         explorer.dst = params.get(TimeZoneExplorer.#PARAMETER_DST);
         explorer.savings = Number.parseInt(params.get(TimeZoneExplorer.#PARAMETER_SAVINGS));
@@ -60,12 +63,12 @@ class TimeZoneExplorer {
         this.#map = L.map(document.querySelector(TimeZoneExplorer.#SELECTOR_MAP), {center: [0.0, 0.0], zoom: 0});
         L.tileLayer(TimeZoneExplorer.#MAP_TILES_URL, TimeZoneExplorer.#MAP_TILES_OPTIONS).addTo(this.#map);
         this.#markers = L.layerGroup().addTo(this.#map);
-        return this.#load(TimeZoneExplorer.#COUNTRIES, (countries) => {
+        return this.#load(TimeZoneExplorer.#DATA_COUNTRIES, (countries) => {
             this.#countries = {};
             countries.forEach((country) => {
                 this.#countries[country.code] = country.name;
             });
-            return this.#load(TimeZoneExplorer.#TIME_ZONES, (zones) => {
+            return this.#load(TimeZoneExplorer.#DATA_TIME_ZONES, (zones) => {
                 this.#zones = zones.map((zone) => new TimeZone(zone, this.#countries[zone.country]));
                 this.#renderSelect(TimeZoneExplorer.#SELECTOR_REGION, (zone) => zone.region, undefined, undefined,
                         (event) => {
@@ -74,6 +77,10 @@ class TimeZoneExplorer {
                 document.querySelector(TimeZoneExplorer.#SELECTOR_SUBREGION).oninput = (event) => {
                     this.subregion = event.target.value;
                 };
+                this.#renderSelect(TimeZoneExplorer.#SELECTOR_COUNTRY, (zone) => zone.country, undefined,
+                        (country) => this.#countries[country], (event) => {
+                            this.country = event.target.value;
+                        });
                 this.#renderSelect(TimeZoneExplorer.#SELECTOR_OFFSET, (zone) => zone.offset, (a, b) => a - b,
                         TimeZone.LABEL_H_M, (event) => {
                             this.offset = event.target.value;
@@ -107,6 +114,15 @@ class TimeZoneExplorer {
 
     set subregion(subregion) {
         document.querySelector(TimeZoneExplorer.#SELECTOR_SUBREGION).value = subregion;
+        this.render();
+    }
+
+    get country() {
+        return this.#getSelect(TimeZoneExplorer.#SELECTOR_COUNTRY, (country) => country || null);
+    }
+
+    set country(country) {
+        this.#setSelect(TimeZoneExplorer.#SELECTOR_COUNTRY, country);
         this.render();
     }
 
@@ -165,6 +181,7 @@ class TimeZoneExplorer {
     reset() {
         this.region = null;
         this.subregion = null;
+        this.country = null;
         this.offset = null;
         this.dst = null;
         this.savings = null;
@@ -193,6 +210,7 @@ class TimeZoneExplorer {
         return this.#zones.filter((zone) => (this.region === null) || (zone.region == this.region))
                 .filter((zone) => (this.subregion === null)
                         || (zone.subregion.toLowerCase().includes(this.subregion.trim().toLowerCase())))
+                .filter((zone) => (this.country === null) || (zone.country == this.country))
                 .filter((zone) => (this.offset === null) || (zone.offset == this.offset))
                 .filter((zone) => (this.dst === null) || (zone.dst == this.dst))
                 .filter((zone) => (this.savings === null) || (zone.savings == this.savings));

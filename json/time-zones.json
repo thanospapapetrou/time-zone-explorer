@@ -2442,7 +2442,7 @@
     "offset": -10800000,
     "dst": false,
     "savings": 0,
-    "country": "",
+    "country": "AQ",
     "city": "Rothera Research Station",
     "lat": -67.5691808,
     "lng": -68.1221663
@@ -2466,7 +2466,7 @@
     "offset": 10800000,
     "dst": false,
     "savings": 0,
-    "country": "",
+    "country": "AQ",
     "city": "Showa Station",
     "lat": -69.0042444,
     "lng": 39.5820278
@@ -2478,7 +2478,7 @@
     "offset": 0,
     "dst": true,
     "savings": 7200000,
-    "country": "",
+    "country": "AQ",
     "city": "Troll",
     "lat": -72.0119803,
     "lng": 2.5344254
