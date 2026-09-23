@@ -6,10 +6,6 @@ header, nav, aside, main, footer {
     margin: 1em;
 }
 
-aside {
-    float:right;
-}
-
 label, select {
     margin: 1em;
 }

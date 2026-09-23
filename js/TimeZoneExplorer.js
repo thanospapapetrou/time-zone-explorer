@@ -15,6 +15,7 @@ class TimeZoneExplorer {
     static #PARAMETER_OFFSET = 'offset';
     static #PARAMETER_REGION = 'region';
     static #PARAMETER_SAVINGS = 'savings';
+    static #PARAMETER_SUBREGION = 'subregion';
     static #PARAMETER_ZOOM = 'zoom';
     static #SELECTOR_CLEAR = 'button#clear';
     static #SELECTOR_COUNT = 'td#count';
@@ -23,6 +24,7 @@ class TimeZoneExplorer {
     static #SELECTOR_OFFSET = 'select#offset';
     static #SELECTOR_REGION = 'select#region';
     static #SELECTOR_SAVINGS = 'select#savings';
+    static #SELECTOR_SUBREGION = 'input#subregion';
     static #SELECTOR_ZONES = 'tbody#zones';
     static #TIME_ZONES = './json/time-zones.json';
     // TODO fix coordinates
@@ -45,6 +47,7 @@ class TimeZoneExplorer {
         const explorer = await new TimeZoneExplorer();
         const params = new URLSearchParams(location.search);
         explorer.region = params.get(TimeZoneExplorer.#PARAMETER_REGION);
+        explorer.subregion = params.get(TimeZoneExplorer.#PARAMETER_SUBREGION);
         explorer.offset = Number.parseInt(params.get(TimeZoneExplorer.#PARAMETER_OFFSET));
         explorer.dst = params.get(TimeZoneExplorer.#PARAMETER_DST);
         explorer.savings = Number.parseInt(params.get(TimeZoneExplorer.#PARAMETER_SAVINGS));
@@ -68,6 +71,9 @@ class TimeZoneExplorer {
                         (event) => {
                             this.region = event.target.value;
                         });
+                document.querySelector(TimeZoneExplorer.#SELECTOR_SUBREGION).oninput = (event) => {
+                    this.subregion = event.target.value;
+                };
                 this.#renderSelect(TimeZoneExplorer.#SELECTOR_OFFSET, (zone) => zone.offset, (a, b) => a - b,
                         TimeZone.LABEL_H_M, (event) => {
                             this.offset = event.target.value;
@@ -92,6 +98,15 @@ class TimeZoneExplorer {
 
     set region(region) {
         this.#setSelect(TimeZoneExplorer.#SELECTOR_REGION, region);
+        this.render();
+    }
+
+    get subregion() {
+        return document.querySelector(TimeZoneExplorer.#SELECTOR_SUBREGION).value;
+    }
+
+    set subregion(subregion) {
+        document.querySelector(TimeZoneExplorer.#SELECTOR_SUBREGION).value = subregion;
         this.render();
     }
 
@@ -149,6 +164,7 @@ class TimeZoneExplorer {
 
     reset() {
         this.region = null;
+        this.subregion = null;
         this.offset = null;
         this.dst = null;
         this.savings = null;
@@ -175,6 +191,8 @@ class TimeZoneExplorer {
 
     #filter() {
         return this.#zones.filter((zone) => (this.region === null) || (zone.region == this.region))
+                .filter((zone) => (this.subregion === null)
+                        || (zone.subregion.toLowerCase().includes(this.subregion.trim().toLowerCase())))
                 .filter((zone) => (this.offset === null) || (zone.offset == this.offset))
                 .filter((zone) => (this.dst === null) || (zone.dst == this.dst))
                 .filter((zone) => (this.savings === null) || (zone.savings == this.savings));

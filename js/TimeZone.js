@@ -41,6 +41,10 @@ class TimeZone {
         return this.#zone.region;
     }
 
+    get subregion() {
+        return this.#zone.subregion;
+    }
+
     get offset() {
         return this.#zone.offset;
     }
@@ -93,14 +97,14 @@ class TimeZone {
         this.#row.appendChild(this.#renderDuration(this.#zone.offset));
         this.#row.appendChild(this.#renderBoolean(this.#zone.dst));
         this.#row.appendChild(this.#renderDuration(this.#zone.savings));
-        this.#row.addEventListener(Events.#MOUSE_OVER, this.highlight.bind(this));
-        this.#row.addEventListener(Events.#MOUSE_OUT, this.reset.bind(this));
+        this.#row.addEventListener(Events.MOUSE_OVER, this.highlight.bind(this));
+        this.#row.addEventListener(Events.MOUSE_OUT, this.reset.bind(this));
     }
 
     #renderMarker() {
         this.#marker = L.marker([this.#zone.lat, this.#zone.lng], {title: this.#zone.id}).bindPopup(this.#renderPopup());
-        this.#marker.addEventListener(Events.#MOUSE_OVER, this.highlight.bind(this));
-        this.#marker.addEventListener(Events.#MOUSE_OUT, this.reset.bind(this));
+        this.#marker.addEventListener(Events.MOUSE_OVER, this.highlight.bind(this));
+        this.#marker.addEventListener(Events.MOUSE_OUT, this.reset.bind(this));
     }
 
     #renderPopup() {
